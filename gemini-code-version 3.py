@@ -7,6 +7,31 @@ st.set_page_config(
     page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="🎄"
 )
 
+# Inyectar estilos CSS para colorear los sliders en la interfaz
+st.markdown(
+    """
+    <style>
+    /* Slider 1: Valor semilla (Verde #556b2f) */
+    div[data-baseweb="slider"]:nth-of-type(1) div[role="slider"] {
+        background-color: #556b2f !important;
+    }
+    /* Slider 2: Paso diferencial (Rojo #8b0000) */
+    div[data-baseweb="slider"]:nth-of-type(2) div[role="slider"] {
+        background-color: #8b0000 !important;
+    }
+    /* Slider 3: Exponente de tolerancia (Gris) */
+    div[data-baseweb="slider"]:nth-of-type(3) div[role="slider"] {
+        background-color: grey !important;
+    }
+    /* Slider 4: Límite de iteraciones (Verde #556b2f) */
+    div[data-baseweb="slider"]:nth-of-type(4) div[role="slider"] {
+        background-color: #556b2f !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("Método Newton Raphson - Buscador de raíces")
 st.markdown(
     "Elegí una función, ajustá los parámetros y presioná **Ejecutar NR** para"
@@ -206,17 +231,17 @@ if st.button("Ejecutar NR", type="primary"):
   # Función f(x) con color verde #556b2f
   ax.plot(x_vals, y_vals, label="f(x)", color="#556b2f", linewidth=2.5)
 
-  # Valor semilla con color #eead0e y símbolo de reno (🦌)
+  # Valor semilla con color lightgrey, forma de rombo (diamond 'D') y reno (🦌)
   try:
     val_ini = f_seleccionada(x0_inicial)
     if not np.isnan(val_ini):
       ax.scatter(
           [x0_inicial],
           [val_ini],
-          color="#eead0e",
-          s=130,
+          color="lightgrey",
+          s=140,
           zorder=5,
-          marker="^",
+          marker="D",
           edgecolors="black",
           label=f"Semilla x₀ (🦌) = {x0_inicial}",
       )
@@ -285,7 +310,7 @@ if st.button("Ejecutar NR", type="primary"):
           marker="o",
           linewidth=1.5,
           markersize=5,
-          label="Saltos NR",
+          label="Saltos NR (🦌)",
       )
 
       if len(xs_it) > 0:
