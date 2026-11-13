@@ -4,7 +4,7 @@ import streamlit as st
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="🎄"
+    page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="📈"
 )
 
 st.title("Método Newton Raphson - Buscador de raíces")
@@ -203,17 +203,18 @@ if st.button("Ejecutar NR", type="primary"):
   ax.axhline(0, color="grey", linewidth=1.2, linestyle="-")
   ax.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
-  ax.plot(x_vals, y_vals, label="f(x)", color="#2b5c8f", linewidth=2)
+  # Función en verde navideño (#1b4332)
+  ax.plot(x_vals, y_vals, label="f(x)", color="#1b4332", linewidth=2.5)
 
-  # Valor semilla en rojo (red) con símbolo de bastón de caramelo (🍬)
+  # Valor semilla en amarillo (yellow) con símbolo de bastón de caramelo (🍬)
   try:
     val_ini = f_seleccionada(x0_inicial)
     if not np.isnan(val_ini):
       ax.scatter(
           [x0_inicial],
           [val_ini],
-          color="red",
-          s=120,
+          color="yellow",
+          s=130,
           zorder=5,
           marker="^",
           edgecolors="black",
@@ -222,12 +223,12 @@ if st.button("Ejecutar NR", type="primary"):
   except:
     pass
 
-  # Si encuentra la raíz: color verde (green) con círculo/regalo (🎁)
+  # Si encuentra la raíz: color rojo (red) con regalo (🎁)
   if not error_dominio and not division_cero and abs(f0) <= e:
     ax.scatter(
         [x0],
         [f0],
-        color="green",
+        color="red",
         s=140,
         zorder=6,
         marker="o",
@@ -235,11 +236,11 @@ if st.button("Ejecutar NR", type="primary"):
         label=f"Raíz hallada (🎁) ≈ {round(x0, 4)}",
     )
   elif not error_dominio and not division_cero:
-    # Si no la encuentra: color amarillo (yellow) con carbón (🪨)
+    # Si no la encuentra: color gris oscuro (darkgrey) con carbón (🪨)
     ax.scatter(
         [x0],
         [f0],
-        color="yellow",
+        color="darkgrey",
         s=140,
         zorder=6,
         marker="X",
@@ -266,7 +267,15 @@ if st.button("Ejecutar NR", type="primary"):
       ax2.axhline(0, color="grey", linewidth=1.2, linestyle="-")
       ax2.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
-      ax2.plot(x_vals, y_vals, label="f(x)", color="#2b5c8f", linewidth=2, alpha=0.7)
+      # Función en verde navideño
+      ax2.plot(
+          x_vals,
+          y_vals,
+          label="f(x)",
+          color="#1b4332",
+          linewidth=2,
+          alpha=0.7,
+      )
 
       xs_it = [pt[0] for pt in puntos_iteracion]
       ys_it = [pt[1] for pt in puntos_iteracion]
@@ -274,7 +283,7 @@ if st.button("Ejecutar NR", type="primary"):
       ax2.plot(
           xs_it,
           ys_it,
-          color="red",
+          color="orange",
           linestyle="-.",
           marker="o",
           linewidth=1.5,
@@ -286,7 +295,7 @@ if st.button("Ejecutar NR", type="primary"):
         ax2.scatter(
             [xs_it[-1]],
             [ys_it[-1]],
-            color="yellow" if abs(f0) > e else "green",
+            color="darkgrey" if abs(f0) > e else "red",
             s=100,
             zorder=6,
             edgecolors="black",
