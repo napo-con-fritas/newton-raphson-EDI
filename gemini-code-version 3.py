@@ -4,20 +4,18 @@ import streamlit as st
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Método Newton Raphson - Buscador de raíces", page_icon="📈"
+    page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="📈"
 )
 
 st.title("Método Newton Raphson - Buscador de raíces")
 st.markdown(
-    "Elegí una función, ajustá los parámetros con las barras deslizadoras en la"
-    " página principal y presioná Ejecutar NR para descubrir si se puede"
-    " utilizar este método para encontrar raíces o no."
+    "Elegí una función, ajustá los parámetros y presioná **Ejecutar NR** para"
+    " descubrir si se puede utilizar este método para encontrar raíces o no."
 )
 
 # --- CONTROLES EN LA PÁGINA PRINCIPAL ---
 st.subheader("1. Selección de Función")
 
-# Diccionario con 8 funciones
 funciones = {
     "f(x) = e^x - 10": {
         "func": lambda x: np.exp(x) - 10,
@@ -73,21 +71,19 @@ opcion = st.selectbox("Elegí una función a evaluar:", list(funciones.keys()))
 f_seleccionada = funciones[opcion]["func"]
 
 st.markdown("---")
-st.subheader("2. Parámetros del Algoritmo (Sliders)")
+st.subheader("2. Parámetros del Algoritmo")
 
 col_s1, col_s2 = st.columns(2)
 
 with col_s1:
-  x0_inicial = st.slider(
-      "Valor semilla (x₀):",
-      min_value=-10.0,
-      max_value=10.0,
-      value=1.5,
-      step=0.1,
-      format="%.2f",
+  # Valor semilla como un número entero editable (input)
+  x0_inicial = st.number_input(
+      "Valor semilla (x₀) [Ingresar valor entero]:",
+      value=1,
+      step=1,
+      format="%d",
   )
 
-  # Paso diferencial (d) entre 1e-5 y 0.5
   d = st.slider(
       "Paso diferencial (d):",
       min_value=1e-5,
@@ -108,7 +104,6 @@ with col_s2:
   e = 10.0**e_exp
   st.write(f"Tolerancia resultante (e): `{e:.1e}`")
 
-  # Límite de iteraciones en pasos de 50
   n = st.slider(
       "Límite de iteraciones (n):",
       min_value=50,
@@ -127,7 +122,7 @@ def siguiente(x0, x1, f0, f1):
   return -f0 * ((x0 - x1) / (f0 - f1)) + x0
 
 
-if st.button("🚀 Ejecutar NR", type="primary"):
+if st.button("Ejecutar NR", type="primary"):
   x0 = float(x0_inicial)
   x1 = x0 + d
 
@@ -162,15 +157,10 @@ if st.button("🚀 Ejecutar NR", type="primary"):
   # --- RESULTADOS Y DIAGNÓSTICO ---
   st.subheader("📊 Resultados y Comportamiento")
 
-  if error_dominio:
+  if error_dominio or division_cero:
     st.error(
         "🪨 Recórcholis! No todo método es infalible, no hemos encontrado"
-        " raíces (Error de dominio)."
-    )
-  elif division_cero:
-    st.error(
-        "🪨 Recórcholis! No todo método es infalible, no hemos encontrado"
-        " raíces (Pendiente nula / división por cero)."
+        " raíces (Error de dominio o división por cero)."
     )
   elif abs(f0) <= e:
     st.success(
@@ -186,8 +176,9 @@ if st.button("🚀 Ejecutar NR", type="primary"):
         " raíces."
     )
     st.write(
-        f"Se alcanzó el límite de **{n} iteraciones**. La última aproximación"
-        f" fue **$x = {round(x0, 4)}$** con un error de **$ {abs(f0):.4e} $**."
+        f"Se alcanzó el límite de **{n} iteraciones**. La mejor aproximación"
+        f" encontrada fue **$x = {round(x0, 4)}$** con un error de **$"
+        f" {abs(f0):.4e} $**."
     )
     st.info(
         f"💡 **Diagnóstico sobre esta función:** {funciones[opcion]['desc']}"
@@ -213,6 +204,7 @@ if st.button("🚀 Ejecutar NR", type="primary"):
 
   ax.plot(x_vals, y_vals, label="f(x)", color="#2b5c8f", linewidth=2)
 
+  # Marcar semilla con bastón de caramelo (texto / anotación)
   try:
     val_ini = f_seleccionada(x0_inicial)
     if not np.isnan(val_ini):
@@ -220,22 +212,36 @@ if st.button("🚀 Ejecutar NR", type="primary"):
           [x0_inicial],
           [val_ini],
           color="orange",
-          s=90,
+          s=110,
           zorder=5,
-          label=f"Semilla x₀ = {x0_inicial}",
+          marker="^",
+          label=f"Semilla x₀ (🍬) = {x0_inicial}",
       )
   except:
     pass
 
+  # Si encuentra la raíz, círculo / regalo (🎁)
   if not error_dominio and not division_cero and abs(f0) <= e:
     ax.scatter(
         [x0],
         [f0],
         color="green",
-        s=120,
+        s=140,
         zorder=6,
-        marker="*",
-        label=f"Raíz hallada ≈ {round(x0, 4)}",
+        marker="o",
+        edgecolors="black",
+        label=f"Raíz hallada (🎁) ≈ {round(x0, 4)}",
+    )
+  elif not error_dominio and not division_cero:
+    # Si no la encuentra, muestra el punto final con carbón (🪨)
+    ax.scatter(
+        [x0],
+        [f0],
+        color="black",
+        s=140,
+        zorder=6,
+        marker="X",
+        label=f"Último valor (🪨) ≈ {round(x0, 4)}",
     )
 
   ax.set_xlabel("x")
