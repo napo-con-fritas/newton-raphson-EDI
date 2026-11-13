@@ -7,25 +7,35 @@ st.set_page_config(
     page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="🎄"
 )
 
-# Inyectar estilos CSS para colorear los sliders en la interfaz
+# Inyectar estilos CSS específicos para colorear cada slider de la interfaz
 st.markdown(
     """
     <style>
-    /* Slider 1: Valor semilla (Verde #556b2f) */
-    div[data-baseweb="slider"]:nth-of-type(1) div[role="slider"] {
+    /* Slider 1: Paso diferencial (Verde #556b2f) */
+    div[data-testid="stSlider"]:nth-of-type(1) div[role="slider"] {
+        background-color: #556b2f !important;
+        border-color: #556b2f !important;
+    }
+    div[data-testid="stSlider"]:nth-of-type(1) div.st-bp {
         background-color: #556b2f !important;
     }
-    /* Slider 2: Paso diferencial (Rojo #8b0000) */
-    div[data-baseweb="slider"]:nth-of-type(2) div[role="slider"] {
+
+    /* Slider 2: Tolerancia / Exponente (Rojo #8b0000) */
+    div[data-testid="stSlider"]:nth-of-type(2) div[role="slider"] {
+        background-color: #8b0000 !important;
+        border-color: #8b0000 !important;
+    }
+    div[data-testid="stSlider"]:nth-of-type(2) div.st-bp {
         background-color: #8b0000 !important;
     }
-    /* Slider 3: Exponente de tolerancia (Gris) */
-    div[data-baseweb="slider"]:nth-of-type(3) div[role="slider"] {
+
+    /* Slider 3: Límite de iteraciones (Gris) */
+    div[data-testid="stSlider"]:nth-of-type(3) div[role="slider"] {
         background-color: grey !important;
+        border-color: grey !important;
     }
-    /* Slider 4: Límite de iteraciones (Verde #556b2f) */
-    div[data-baseweb="slider"]:nth-of-type(4) div[role="slider"] {
-        background-color: #556b2f !important;
+    div[data-testid="stSlider"]:nth-of-type(3) div.st-bp {
+        background-color: grey !important;
     }
     </style>
     """,
@@ -108,6 +118,7 @@ with col_s1:
       format="%d",
   )
 
+  # Slider 1: Verde #556b2f
   d = st.slider(
       "Paso diferencial (d):",
       min_value=1e-5,
@@ -118,6 +129,7 @@ with col_s1:
   )
 
 with col_s2:
+  # Slider 2: Rojo #8b0000
   e_exp = st.slider(
       "Exponente de tolerancia (Error e = 10^x):",
       min_value=-15,
@@ -128,6 +140,7 @@ with col_s2:
   e = 10.0**e_exp
   st.write(f"Tolerancia resultante (e): `{e:.1e}`")
 
+  # Slider 3: Gris
   n = st.slider(
       "Límite de iteraciones (n):",
       min_value=50,
