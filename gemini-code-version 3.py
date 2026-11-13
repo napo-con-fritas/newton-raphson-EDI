@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
 
-# Configuración de la página
+# Configuración de la página con icono de árbol de navidad
 st.set_page_config(
-    page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="📈"
+    page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="🎄"
 )
 
 st.title("Método Newton Raphson - Buscador de raíces")
@@ -199,36 +199,36 @@ if st.button("Ejecutar NR", type="primary"):
 
   fig, ax = plt.subplots(figsize=(8, 4))
 
-  # Ejes cartesianos en color gris (grey)
+  # Ejes cartesianos en gris
   ax.axhline(0, color="grey", linewidth=1.2, linestyle="-")
   ax.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
-  # Función en verde navideño (#1b4332)
-  ax.plot(x_vals, y_vals, label="f(x)", color="#1b4332", linewidth=2.5)
+  # Función f(x) con color verde #556b2f
+  ax.plot(x_vals, y_vals, label="f(x)", color="#556b2f", linewidth=2.5)
 
-  # Valor semilla en amarillo (yellow) con símbolo de bastón de caramelo (🍬)
+  # Valor semilla con color #eead0e y símbolo de reno (🦌)
   try:
     val_ini = f_seleccionada(x0_inicial)
     if not np.isnan(val_ini):
       ax.scatter(
           [x0_inicial],
           [val_ini],
-          color="yellow",
+          color="#eead0e",
           s=130,
           zorder=5,
           marker="^",
           edgecolors="black",
-          label=f"Semilla x₀ (🍬) = {x0_inicial}",
+          label=f"Semilla x₀ (🦌) = {x0_inicial}",
       )
   except:
     pass
 
-  # Si encuentra la raíz: color rojo (red) con regalo (🎁)
+  # Raíz encontrada con color #8b0000 (regalo 🎁) o valor más cercano en darkgrey (carbón 🪨)
   if not error_dominio and not division_cero and abs(f0) <= e:
     ax.scatter(
         [x0],
         [f0],
-        color="red",
+        color="#8b0000",
         s=140,
         zorder=6,
         marker="o",
@@ -236,7 +236,6 @@ if st.button("Ejecutar NR", type="primary"):
         label=f"Raíz hallada (🎁) ≈ {round(x0, 4)}",
     )
   elif not error_dominio and not division_cero:
-    # Si no la encuentra: color gris oscuro (darkgrey) con carbón (🪨)
     ax.scatter(
         [x0],
         [f0],
@@ -263,16 +262,14 @@ if st.button("Ejecutar NR", type="primary"):
       )
 
       fig2, ax2 = plt.subplots(figsize=(8, 4))
-      # Ejes cartesianos en gris
       ax2.axhline(0, color="grey", linewidth=1.2, linestyle="-")
       ax2.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
-      # Función en verde navideño
       ax2.plot(
           x_vals,
           y_vals,
           label="f(x)",
-          color="#1b4332",
+          color="#556b2f",
           linewidth=2,
           alpha=0.7,
       )
@@ -283,7 +280,7 @@ if st.button("Ejecutar NR", type="primary"):
       ax2.plot(
           xs_it,
           ys_it,
-          color="orange",
+          color="#eead0e",
           linestyle="-.",
           marker="o",
           linewidth=1.5,
@@ -295,7 +292,7 @@ if st.button("Ejecutar NR", type="primary"):
         ax2.scatter(
             [xs_it[-1]],
             [ys_it[-1]],
-            color="darkgrey" if abs(f0) > e else "red",
+            color="darkgrey" if abs(f0) > e else "#8b0000",
             s=100,
             zorder=6,
             edgecolors="black",
