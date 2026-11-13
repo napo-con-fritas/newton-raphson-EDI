@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="🎄"
 )
 
-# Inyectar estilos CSS para la interfaz
+# Inyectar estilos CSS para la interfaz y los sliders
 st.markdown(
     """
     <style>
@@ -210,7 +210,7 @@ if st.button("Ejecutar NR", type="primary"):
         f" {abs(f0):.4e} $**."
     )
     st.info(
-        f"💡 **Diagnóstico sobre esta función:** {funciones[opcion]['desc']}"
+        f"🎅🏻 **Diagnóstico sobre esta función:** {funciones[opcion]['desc']}"
     )
 
   # --- GRÁFICO PRINCIPAL ---
@@ -232,115 +232,4 @@ if st.button("Ejecutar NR", type="primary"):
   ax.axhline(0, color="grey", linewidth=1.2, linestyle="-")
   ax.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
-  ax.plot(x_vals, y_vals, label="f(x)", color="#556b2f", linewidth=2.5)
-
-  try:
-    val_ini = f_seleccionada(x0_inicial)
-    if not np.isnan(val_ini):
-      ax.scatter(
-          [x0_inicial],
-          [val_ini],
-          color="lightgrey",
-          s=140,
-          zorder=5,
-          marker="D",
-          edgecolors="black",
-          label=f"Semilla x₀ (🦌) = {x0_inicial}",
-      )
-  except:
-    pass
-
-  if not error_dominio and not division_cero and abs(f0) <= e:
-    ax.scatter(
-        [x0],
-        [f0],
-        color="#8b0000",
-        s=140,
-        zorder=6,
-        marker="o",
-        edgecolors="black",
-        label=f"Raíz hallada (🎁) ≈ {round(x0, 4)}",
-    )
-  elif not error_dominio and not division_cero:
-    ax.scatter(
-        [x0],
-        [f0],
-        color="darkgrey",
-        s=140,
-        zorder=6,
-        marker="X",
-        edgecolors="black",
-        label=f"Valor más cercano (🪨) ≈ {round(x0, 4)}",
-    )
-
-  ax.set_xlabel("x")
-  ax.set_ylabel("f(x)")
-  ax.grid(True, alpha=0.3)
-  ax.legend()
-  st.pyplot(fig)
-
-  # --- EXPANSOR DE LÍNEAS DE ITERACIÓN ---
-  if not error_dominio and not division_cero:
-    with st.expander("🎁 Ver líneas de las iteraciones consideradas"):
-      # Lógica condicional: si hay más de 10 puntos, seleccionamos exactamente 10 distribuidos
-      if len(puntos_iteracion) > 10:
-        indices = np.linspace(
-            0, len(puntos_iteracion) - 1, 10, dtype=int
-        )
-        puntos_a_mostrar = [puntos_iteracion[idx] for idx in indices]
-        st.markdown(
-            "*(El algoritmo realizó más de 10 iteraciones, por lo que se"
-            " muestran 10 puntos representativos de la trayectoria).* "
-        )
-      else:
-        puntos_a_mostrar = puntos_iteracion
-        st.markdown(
-            "*(Se muestran todas las iteraciones realizadas ya que fueron 10"
-            " o menos).* "
-        )
-
-      fig2, ax2 = plt.subplots(figsize=(8, 4))
-      ax2.axhline(0, color="grey", linewidth=1.2, linestyle="-")
-      ax2.axvline(0, color="grey", linewidth=1.2, linestyle="-")
-
-      ax2.plot(
-          x_vals,
-          y_vals,
-          label="f(x)",
-          color="#556b2f",
-          linewidth=2,
-          alpha=0.6,
-      )
-
-      xs_it = [pt[0] for pt in puntos_a_mostrar]
-      ys_it = [pt[1] for pt in puntos_a_mostrar]
-
-      ax2.plot(
-          xs_it,
-          ys_it,
-          color="#eead0e",
-          linestyle="-.",
-          marker="o",
-          linewidth=1.5,
-          markersize=5,
-          label="Valores considerados (🦌)",
-      )
-
-      if len(puntos_iteracion) > 0:
-        ultimo_pt = puntos_iteracion[-1]
-        ax2.scatter(
-            [ultimo_pt[0]],
-            [ultimo_pt[1]],
-            color="darkgrey" if abs(f0) > e else "#8b0000",
-            s=120,
-            zorder=6,
-            edgecolors="black",
-            marker="X" if abs(f0) > e else "o",
-            label="Punto final obtenido",
-        )
-
-      ax2.set_xlabel("x")
-      ax2.set_ylabel("f(x)")
-      ax2.grid(True, alpha=0.3)
-      ax2.legend()
-      st.pyplot(fig2)
+  ax.plot(x_vals, y_vals, label="
