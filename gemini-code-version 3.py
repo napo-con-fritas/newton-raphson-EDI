@@ -7,11 +7,10 @@ st.set_page_config(
     page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="🎄"
 )
 
-# Inyectar estilos CSS específicos para colorear cada slider de la interfaz
+# Inyectar estilos CSS para la interfaz
 st.markdown(
     """
     <style>
-    /* Slider 1: Paso diferencial (Verde #556b2f) */
     div[data-testid="stSlider"]:nth-of-type(1) div[role="slider"] {
         background-color: #556b2f !important;
         border-color: #556b2f !important;
@@ -19,8 +18,6 @@ st.markdown(
     div[data-testid="stSlider"]:nth-of-type(1) div.st-bp {
         background-color: #556b2f !important;
     }
-
-    /* Slider 2: Tolerancia / Exponente (Rojo #8b0000) */
     div[data-testid="stSlider"]:nth-of-type(2) div[role="slider"] {
         background-color: #8b0000 !important;
         border-color: #8b0000 !important;
@@ -28,8 +25,6 @@ st.markdown(
     div[data-testid="stSlider"]:nth-of-type(2) div.st-bp {
         background-color: #8b0000 !important;
     }
-
-    /* Slider 3: Límite de iteraciones (Gris) */
     div[data-testid="stSlider"]:nth-of-type(3) div[role="slider"] {
         background-color: grey !important;
         border-color: grey !important;
@@ -118,7 +113,6 @@ with col_s1:
       format="%d",
   )
 
-  # Slider 1: Verde #556b2f
   d = st.slider(
       "Paso diferencial (d):",
       min_value=1e-5,
@@ -129,7 +123,6 @@ with col_s1:
   )
 
 with col_s2:
-  # Slider 2: Rojo #8b0000
   e_exp = st.slider(
       "Exponente de tolerancia (Error e = 10^x):",
       min_value=-15,
@@ -140,7 +133,6 @@ with col_s2:
   e = 10.0**e_exp
   st.write(f"Tolerancia resultante (e): `{e:.1e}`")
 
-  # Slider 3: Gris
   n = st.slider(
       "Límite de iteraciones (n):",
       min_value=50,
@@ -237,14 +229,11 @@ if st.button("Ejecutar NR", type="primary"):
 
   fig, ax = plt.subplots(figsize=(8, 4))
 
-  # Ejes cartesianos en gris
   ax.axhline(0, color="grey", linewidth=1.2, linestyle="-")
   ax.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
-  # Función f(x) con color verde #556b2f
   ax.plot(x_vals, y_vals, label="f(x)", color="#556b2f", linewidth=2.5)
 
-  # Valor semilla con color lightgrey, forma de rombo (diamond 'D') y reno (🦌)
   try:
     val_ini = f_seleccionada(x0_inicial)
     if not np.isnan(val_ini):
@@ -261,7 +250,6 @@ if st.button("Ejecutar NR", type="primary"):
   except:
     pass
 
-  # Raíz encontrada con color #8b0000 (regalo 🎁) o valor más cercano en darkgrey (carbón 🪨)
   if not error_dominio and not division_cero and abs(f0) <= e:
     ax.scatter(
         [x0],
@@ -293,11 +281,23 @@ if st.button("Ejecutar NR", type="primary"):
 
   # --- EXPANSOR DE LÍNEAS DE ITERACIÓN ---
   if not error_dominio and not division_cero:
-    with st.expander("🎁 Ver líneas de las iteraciones"):
-      st.markdown(
-          "Este gráfico muestra los saltos y aproximaciones sucesivas del"
-          " algoritmo paso a paso."
-      )
+    with st.expander("🎁 Ver líneas de las iteraciones consideradas"):
+      # Lógica condicional: si hay más de 10 puntos, seleccionamos exactamente 10 distribuidos
+      if len(puntos_iteracion) > 10:
+        indices = np.linspace(
+            0, len(puntos_iteracion) - 1, 10, dtype=int
+        )
+        puntos_a_mostrar = [puntos_iteracion[idx] for idx in indices]
+        st.markdown(
+            "*(El algoritmo realizó más de 10 iteraciones, por lo que se"
+            " muestran 10 puntos representativos de la trayectoria).* "
+        )
+      else:
+        puntos_a_mostrar = puntos_iteracion
+        st.markdown(
+            "*(Se muestran todas las iteraciones realizadas ya que fueron 10"
+            " o menos).* "
+        )
 
       fig2, ax2 = plt.subplots(figsize=(8, 4))
       ax2.axhline(0, color="grey", linewidth=1.2, linestyle="-")
@@ -309,11 +309,11 @@ if st.button("Ejecutar NR", type="primary"):
           label="f(x)",
           color="#556b2f",
           linewidth=2,
-          alpha=0.7,
+          alpha=0.6,
       )
 
-      xs_it = [pt[0] for pt in puntos_iteracion]
-      ys_it = [pt[1] for pt in puntos_iteracion]
+      xs_it = [pt[0] for pt in puntos_a_mostrar]
+      ys_it = [pt[1] for pt in puntos_a_mostrar]
 
       ax2.plot(
           xs_it,
@@ -323,18 +323,20 @@ if st.button("Ejecutar NR", type="primary"):
           marker="o",
           linewidth=1.5,
           markersize=5,
-          label="Saltos NR (🦌)",
+          label="Valores considerados (🦌)",
       )
 
-      if len(xs_it) > 0:
+      if len(puntos_iteracion) > 0:
+        ultimo_pt = puntos_iteracion[-1]
         ax2.scatter(
-            [xs_it[-1]],
-            [ys_it[-1]],
+            [ultimo_pt[0]],
+            [ultimo_pt[1]],
             color="darkgrey" if abs(f0) > e else "#8b0000",
-            s=100,
+            s=120,
             zorder=6,
             edgecolors="black",
-            label="Último punto",
+            marker="X" if abs(f0) > e else "o",
+            label="Punto final obtenido",
         )
 
       ax2.set_xlabel("x")
