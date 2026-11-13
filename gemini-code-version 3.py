@@ -76,7 +76,6 @@ st.subheader("2. Parámetros del Algoritmo")
 col_s1, col_s2 = st.columns(2)
 
 with col_s1:
-  # Valor semilla como un número entero editable (input)
   x0_inicial = st.number_input(
       "Valor semilla (x₀) [Ingresar valor entero]:",
       value=1,
@@ -199,28 +198,31 @@ if st.button("Ejecutar NR", type="primary"):
     y_vals.append(val_f if not np.isnan(val_f) else 0)
 
   fig, ax = plt.subplots(figsize=(8, 4))
-  ax.axhline(0, color="gray", linewidth=1, linestyle="--")
-  ax.axvline(0, color="gray", linewidth=0.5, linestyle="--")
+
+  # Ejes cartesianos en color gris (grey)
+  ax.axhline(0, color="grey", linewidth=1.2, linestyle="-")
+  ax.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
   ax.plot(x_vals, y_vals, label="f(x)", color="#2b5c8f", linewidth=2)
 
-  # Marcar semilla con bastón de caramelo (texto / anotación)
+  # Valor semilla en rojo (red) con símbolo de bastón de caramelo (🍬)
   try:
     val_ini = f_seleccionada(x0_inicial)
     if not np.isnan(val_ini):
       ax.scatter(
           [x0_inicial],
           [val_ini],
-          color="orange",
-          s=110,
+          color="red",
+          s=120,
           zorder=5,
           marker="^",
+          edgecolors="black",
           label=f"Semilla x₀ (🍬) = {x0_inicial}",
       )
   except:
     pass
 
-  # Si encuentra la raíz, círculo / regalo (🎁)
+  # Si encuentra la raíz: color verde (green) con círculo/regalo (🎁)
   if not error_dominio and not division_cero and abs(f0) <= e:
     ax.scatter(
         [x0],
@@ -233,15 +235,16 @@ if st.button("Ejecutar NR", type="primary"):
         label=f"Raíz hallada (🎁) ≈ {round(x0, 4)}",
     )
   elif not error_dominio and not division_cero:
-    # Si no la encuentra, muestra el punto final con carbón (🪨)
+    # Si no la encuentra: color amarillo (yellow) con carbón (🪨)
     ax.scatter(
         [x0],
         [f0],
-        color="black",
+        color="yellow",
         s=140,
         zorder=6,
         marker="X",
-        label=f"Último valor (🪨) ≈ {round(x0, 4)}",
+        edgecolors="black",
+        label=f"Valor más cercano (🪨) ≈ {round(x0, 4)}",
     )
 
   ax.set_xlabel("x")
@@ -259,8 +262,9 @@ if st.button("Ejecutar NR", type="primary"):
       )
 
       fig2, ax2 = plt.subplots(figsize=(8, 4))
-      ax2.axhline(0, color="gray", linewidth=1, linestyle="--")
-      ax2.axvline(0, color="gray", linewidth=0.5, linestyle="--")
+      # Ejes cartesianos en gris
+      ax2.axhline(0, color="grey", linewidth=1.2, linestyle="-")
+      ax2.axvline(0, color="grey", linewidth=1.2, linestyle="-")
 
       ax2.plot(x_vals, y_vals, label="f(x)", color="#2b5c8f", linewidth=2, alpha=0.7)
 
@@ -282,7 +286,7 @@ if st.button("Ejecutar NR", type="primary"):
         ax2.scatter(
             [xs_it[-1]],
             [ys_it[-1]],
-            color="gold",
+            color="yellow" if abs(f0) > e else "green",
             s=100,
             zorder=6,
             edgecolors="black",
