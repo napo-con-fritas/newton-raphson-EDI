@@ -222,7 +222,7 @@ if st.button("Ejecutar NR", type="primary"):
     )
 
   # --- GRÁFICO PRINCIPAL ---
-  st.subheader("📉 Visualización Gráfica")
+  st.subheader("🦌 Visualización Gráfica")
   r_min, r_max = funciones[opcion]["rango"]
 
   if not error_dominio and not division_cero and abs(x0) < 50:
