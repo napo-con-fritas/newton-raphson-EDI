@@ -4,13 +4,12 @@ import streamlit as st
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Método de Newton-Raphson (Navideño)", page_icon="🎄"
+    page_title="Método de Newton-Raphson", page_icon="🎄"
 )
 
-st.title("🎄 Buscador Navideño de Raíces: Método de Newton-Raphson (NR)")
+st.title("Buscador de Raíces: Método de Newton-Raphson")
 st.markdown("""
-¡Ayudá a Papá Noel a encontrar las raíces de las funciones! 
-Elegí una función, ajustá los parámetros con las barras deslizadoras en la página principal y presioná **Ejecutar NR** para ver si encontramos la solución o si nos quedamos con carbón.
+Elegí una función, ajustá los parámetros con las barras deslizadoras en la página principal y presioná **Ejecutar NR** para ver si encontramos la raíz.
 """)
 
 # --- CONTROLES EN LA PÁGINA PRINCIPAL ---
@@ -72,7 +71,7 @@ opcion = st.selectbox("Elegí una función a evaluar:", list(funciones.keys()))
 f_seleccionada = funciones[opcion]["func"]
 
 st.markdown("---")
-st.subheader("2. Parámetros del Algoritmo (Sliders)")
+st.subheader("2. Parámetros del Algoritmo")
 
 # Sliders principales distribuidos en columnas en la página principal
 col_s1, col_s2 = st.columns(2)
@@ -83,7 +82,7 @@ with col_s1:
       min_value=-10.0,
       max_value=10.0,
       value=1.5,
-      step=0.1,
+      step=0.5,
       format="%.2f",
   )
 
@@ -169,7 +168,7 @@ if st.button("🚀 Ejecutar NR Navideño", type="primary"):
     )
   elif abs(f0) <= e:
     st.success(
-        f"🎄 **¡Eureka! ¡Feliz Navidad!** La raíz está en **$x = {round(x0, 6)}$**"
+        f"🎄 **¡Eureka! ** La raíz está en **$x = {round(x0, 6)}$**"
     )
     col_res1, col_res2 = st.columns(2)
     col_res1.metric("Iteraciones realizadas", i)
@@ -177,7 +176,7 @@ if st.button("🚀 Ejecutar NR Navideño", type="primary"):
     st.info(f"💡 **Diagnóstico:** {funciones[opcion]['desc']}")
   else:
     st.warning(
-        "🪨 **¡Carbón :( No hay regalos esta vez!** No se pudo encontrar la"
+        "🪨 **Recórcholis** No se pudo encontrar la"
         " raíz."
     )
     st.write(
@@ -191,7 +190,7 @@ if st.button("🚀 Ejecutar NR Navideño", type="primary"):
     )
 
   # --- GRÁFICO VISUAL PRINCIPAL (PALETA NAVIDEÑA) ---
-  st.subheader("📉 Visualización Gráfica (Estilo Navideño)")
+  st.subheader("📉 Visualización Gráfica ")
   r_min, r_max = funciones[opcion]["rango"]
 
   if not error_dominio and not division_cero and abs(x0) < 50:
