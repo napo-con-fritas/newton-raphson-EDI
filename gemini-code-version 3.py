@@ -4,7 +4,7 @@ import streamlit as st
 
 # Configuración de la página
 st.set_page_config(
-    page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="📈"
+    page_title="Método de Newton-Raphson (Buscador de Raíces)", page_icon="🎄"
 )
 
 st.title("Método Newton Raphson - Buscador de raíces")
